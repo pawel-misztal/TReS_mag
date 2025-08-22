@@ -1,7 +1,12 @@
 import os
 import gc
 
-os.environ['HSA_OVERRIDE_GFX_VERSION'] = '10.3.0'
+import socket
+
+hostname = socket.gethostname()
+
+if hostname == 'nazwa_twojej_maszyny': 
+    os.environ['HSA_OVERRIDE_GFX_VERSION'] = '10.3.0'
 
 from helpersmag.initData import InitData
 from helpersmag.trainingUtils import prepareDataset, setSeed,getDevice,prepareDataloader,prepareLossFn,prepareModel,prepareOptimizer,prepareScheluder,prepareTransforms, loadCheckpoint
