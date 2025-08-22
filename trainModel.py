@@ -5,7 +5,7 @@ import socket
 
 hostname = socket.gethostname()
 
-if hostname == 'nazwa_twojej_maszyny': 
+if hostname == 'mrpawlinux': 
     os.environ['HSA_OVERRIDE_GFX_VERSION'] = '10.3.0'
 
 from helpersmag.initData import InitData
@@ -46,7 +46,7 @@ def cnnFreezer(unfreezeEpoch:int):
             
     return frezzerFunc
 
-def main(initData:InitData,mergeModelAfterEvalEpoch:int = None):
+def main(initData:InitData,mergeModelAfterEvalEpoch:int = None, test:bool = True):
 
     modelCheckpoint, jsonCheckpoint = parseCheckpointArgs()
     canloadCheckpoint = modelCheckpoint != None and jsonCheckpoint != None
@@ -87,7 +87,8 @@ def main(initData:InitData,mergeModelAfterEvalEpoch:int = None):
                   statsCheckpointPath=jsonCheckpoint,
                   mergeModelAfterEvalEpoch=mergeModelAfterEvalEpoch,
                   epochFunc=epochFunc,
-                  optimizerStepEvery=initData.optimizerStepEvery)
+                  optimizerStepEvery=initData.optimizerStepEvery,
+                  test=test)
     except Exception as e:
         print("Error: ",e)
         traceback.print_exc()

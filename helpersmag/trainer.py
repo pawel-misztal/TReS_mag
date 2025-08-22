@@ -357,7 +357,8 @@ def trainLoop(
     initData:InitData = None,
     statsCheckpointPath:Path|str=None,
     mergeModelAfterEvalEpoch:int = None,
-    optimizerStepEvery:int = 1):
+    optimizerStepEvery:int = 1,
+    test:bool = True):
 
   stats:Dict[str,List] = {
     "init_data" : {},
@@ -401,7 +402,8 @@ def trainLoop(
         epochFunc(i,model)
 
       trainStep(model, trainDataLoader, optimizer, lossFn, stats, device, sheluder)
-      testStep(model,testDataLoader, lossFn, stats, device)
+      if(test):
+        testStep(model,testDataLoader, lossFn, stats, device)
       
 
       if(i % evalEveryEpoch == 0 and evalEveryEpoch != -1 or i + 1 == epochCount):

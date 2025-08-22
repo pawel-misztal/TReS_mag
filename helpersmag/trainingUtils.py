@@ -74,8 +74,8 @@ def prepareTransforms(initData:InitData) -> Tuple[List[nn.Module],List[nn.Module
 
 def prepareDataloader(initData:InitData,trainDataset:Dataset, testDataset:Dataset) -> Tuple[DataLoader, DataLoader]:
     batch_size = initData.batch_size
-    trainDataLoader = DataLoader(trainDataset, batch_size=batch_size, shuffle=True)
-    testDataLoader = DataLoader(testDataset, batch_size=batch_size, shuffle=False)
+    trainDataLoader = DataLoader(trainDataset, batch_size=batch_size, shuffle=True, pin_memory=True)
+    testDataLoader = DataLoader(testDataset, batch_size=batch_size, shuffle=False, pin_memory=True)
     return trainDataLoader, testDataLoader
 
 def getDevice() -> Literal['cuda', 'cpu']:
