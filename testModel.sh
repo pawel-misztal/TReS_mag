@@ -1,0 +1,1 @@
+python3 -m helpersmag.testModel -mp /home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/merged/Tres_clive_24352892952640335.pth -p /home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/checkpoints/Tres_clive_24352892952640335.json

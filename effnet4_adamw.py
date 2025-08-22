@@ -1,0 +1,19 @@
+from helpersmag.initData import InitData
+from trainModel import main as train
+
+initData = InitData(__file__,
+                    "Tres", 
+                    batch_size=16,
+                    epoch_count=150, 
+                    eval_every_epoch=10,
+                    mhsa_add_pose_everyLayer=True,
+                    normalize_before=False,
+                    normalize_pos_encode=False,
+                    ffn_extraDropout=False,
+                    ffn_dropout=0.1,
+                    mhsa_dropout=0.1, 
+                    lr=2e-4,
+                    optimizer="AdamW",
+                    cnn_model="effnetb4",
+                    optimizerStepEvery=2)
+train(initData)
