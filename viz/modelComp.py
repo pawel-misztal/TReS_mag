@@ -96,6 +96,14 @@ convnext_paths = [
 "Tres_clive_6018207353725825372.json"
 ]
 
+best2_paths = [
+"Tres_clive_2195870764671500902.json",
+"Tres_clive_2132439253949894371.json",
+"Tres_clive_5567949617806866492.json",
+"Tres_clive_7262409513868502776.json",
+"Tres_clive_2204508173240278964.json"
+]
+
 class DataPaths:
     def __init__(self, name:str, paths:List[str]):
         self.name = name
@@ -256,6 +264,7 @@ def main():
     DataPaths("Effnetb4", effnet_paths),
     DataPaths("ConvNeXt", convnext_paths),
     DataPaths("Org best", org_bests_paths),
+    DataPaths("Org best 2", best2_paths),
 ], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
 
 
