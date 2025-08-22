@@ -432,7 +432,7 @@ def trainLoop(
     tryNormalizeMergedModel(stats, model, saveModelName, mergeModelAfterEvalEpoch)
     print("Done :D")
     bestIndex = np.array(stats["eval_srcc"]).argmax()
-    print( f"Best  srcc:{np.array(stats["eval_srcc"])[bestIndex]} plcc:{np.array(stats["eval_plcc"])[bestIndex]}")
+    print( f"Best  srcc:{np.array(stats['eval_srcc'])[bestIndex]} plcc:{np.array(stats['eval_plcc'])[bestIndex]}")
     pass
 
 print("maghelper")
