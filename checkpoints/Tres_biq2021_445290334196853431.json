@@ -1,12 +1,12 @@
 {
   "init_data": {
-    "start_file_path": "/home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/koniq10k_org_best_v2_1.py",
+    "start_file_path": "/home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/biq2021_org_best_v2_1.py",
     "model_class_name": "Tres",
     "version": 0,
     "seed": 2137,
     "eval_repeats": 50,
     "eval_every_epoch": 10,
-    "dataset": "koniq10k",
+    "dataset": "biq2021",
     "dataset_normalized": false,
     "batch_size": 16,
     "epoch_count": 200,
@@ -48,32 +48,16 @@
     "optimizerStepEvery": 2
   },
   "best_model_path": "",
-  "last_model_path": "/home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/checkpoints/Tres_koniq10k_1643064817860077949_last.pth",
+  "last_model_path": "",
   "merged_model_path": "",
-  "test_loss": [
-    1.4595293639198181
-  ],
-  "test_plcc": [
-    0.5926225781440735
-  ],
-  "test_srcc": [
-    0.6107622385025024
-  ],
-  "test_mae": [
-    0.8782805800437927
-  ],
-  "train_loss": [
-    0.7490544909877437
-  ],
-  "train_plcc": [
-    0.6598052978515625
-  ],
-  "train_srcc": [
-    0.705381453037262
-  ],
-  "train_mae": [
-    0.2916792631149292
-  ],
+  "test_loss": [],
+  "test_plcc": [],
+  "test_srcc": [],
+  "test_mae": [],
+  "train_loss": [],
+  "train_plcc": [],
+  "train_srcc": [],
+  "train_mae": [],
   "eval_plcc": [],
   "eval_srcc": [],
   "eval_mae": [],
