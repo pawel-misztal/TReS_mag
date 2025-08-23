@@ -14,16 +14,17 @@ class Koniq10kData(Dataset):
   mos - higher is better 0-5 -> 0-1\n
   real distortions
   """
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed=2137) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed=2137, mos_z=False, loadImg=True) -> None:
     super().__init__()
     self.train = train
     self.path = path
     self.dataPath = path / "koniq10k_scores_and_distributions/koniq10k_scores_and_distributions.csv"
-    self.imagesPath = path / "koniq10k_1024x768/1024x768"
+    # self.imagesPath = path / "koniq10k_1024x768/1024x768"
+    self.imagesPath = path / "koniq10k_512x384/512x384"
     self.normalize = normalize
 
     scores = pd.read_csv(self.dataPath)
-    self.mos = scores["MOS"].values
+    self.mos = scores["MOS_zscore"].values if mos_z else scores["MOS"].values
     self.images = scores["image_name"].values
 
     length = len(self.mos)
@@ -36,6 +37,7 @@ class Koniq10kData(Dataset):
     self.indexes = i_train if train else i_test
     
     self.transform = transform
+    self.load_img = loadImg
 
   def __len__(self):
     return len(self.indexes)  
@@ -45,11 +47,14 @@ class Koniq10kData(Dataset):
     img_path = self.imagesPath / self.images[i]
     mos = self.mos[i]
 
-    # print(img_path)
-    img = Image.open(img_path)
+    if self.load_img:
+      # print(img_path)
+      img = Image.open(img_path)
 
-    if(self.transform != None):
-      img = self.transform(img)
+      if(self.transform != None):
+        img = self.transform(img)
+    else:
+      img = None
 
     if(self.normalize):
       mos = mos / 5.0

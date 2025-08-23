@@ -30,4 +30,4 @@ initData = InitData(__file__,
                     l2_pool_paper=True,
                     cnn_model="convnext_tiny",
                     lr=2e-5)
-train(initData)
+train(initData,test=False)

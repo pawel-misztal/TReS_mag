@@ -28,7 +28,6 @@ class BIQ2021Dataset(Dataset):
 
     train_scores = pd.read_csv(self.trainDataPath)
     test_scores = pd.read_csv(self.testDataPath)
-    print(train_scores["MOS"].values)
     self.mos = np.concatenate([train_scores["MOS"].values, test_scores["MOS"].values])
     self.images = np.concatenate([train_scores["Image Name"].values, test_scores["Image Name"].values])
 

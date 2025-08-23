@@ -14,7 +14,7 @@ class Kadid10kDataset(Dataset):
   mos - higher is better 0-5 -> 0-1\n
   artificial distortions
   """
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed:int=21) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed:int=21, loadImg=True) -> None:
     super().__init__()
     self.train = train
     self.path = path
@@ -54,6 +54,7 @@ class Kadid10kDataset(Dataset):
     self.images = self.images[selected_mask]
     self.mos = self.mos[selected_mask]
     self.transform = transform
+    self.load_img = loadImg
 
   def __len__(self):
     return len(self.images)  
@@ -64,11 +65,14 @@ class Kadid10kDataset(Dataset):
     img_path = self.imagesPath / self.images[index]
     mos = self.mos[index]
 
-    # print(img_path)
-    img = Image.open(img_path)
+    if self.load_img:
+      # print(img_path)
+      img = Image.open(img_path)
 
-    if(self.transform != None):
-      img = self.transform(img)
+      if(self.transform != None):
+        img = self.transform(img)
+    else:
+      img = None
 
     if(self.normalize):
       mos = mos / 5.0

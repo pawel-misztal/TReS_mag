@@ -54,9 +54,9 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
     
     if(initData.dataset == 'koniq10k'):
         from Datasets.Koniq10kDataset import Koniq10kData, KONIQ10K_PATH
-        if(trainTransList):
-            trainTransList.insert(2,v2.Resize((512, 384)))
-            testTransList.insert(2,v2.Resize((512, 384)))
+        # if(trainTransList):
+        #     trainTransList.insert(2,v2.Resize((512, 384)))
+        #     testTransList.insert(2,v2.Resize((512, 384)))
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
         trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
