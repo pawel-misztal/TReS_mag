@@ -104,6 +104,22 @@ best2_paths = [
 "Tres_clive_2204508173240278964.json"
 ]
 
+best3_paths = [
+"Tres_clive_760294007813512172.json",
+"Tres_clive_577865441360539724.json",
+"Tres_clive_1505220887643538886.json",
+"Tres_clive_5395332614919345312.json",
+"Tres_clive_6760688776062093924.json"
+]
+
+best4_paths = [
+"Tres_clive_1723703182944393278.json",
+"Tres_clive_1140551136897037627.json",
+"Tres_clive_1877733773347527837.json",
+"Tres_clive_827094505691010329.json",
+"Tres_clive_1909099425441213929.json"
+]
+
 class DataPaths:
     def __init__(self, name:str, paths:List[str]):
         self.name = name
@@ -173,6 +189,7 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
 
 
     means = []
+    _means = []
     medians = []
     names = [pd.name for pd in pathsDict]
     ref_srccs:np.ndarray[float] = np.array([t[0] for t in refs]) if refs else None
@@ -182,6 +199,9 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
         means.append(menadiff)
         medianDiff = np.median(srccs) - np.median(ref_srccs) if refs else np.median(srccs)
         medians.append(medianDiff)
+        srccs.sort()
+        srccs = srccs[1:-1]
+        _means.append(srccs.mean())
 
     plt.rcParams["font.family"] = "Times New Roman"
     plt.rcParams["font.size"] = 24
@@ -222,6 +242,15 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
     plt.ylim(min_val - dminmax *marginCoef, max_val + dminmax*marginCoef)
     plt.tight_layout()
     plt.show()
+
+    print("data")
+    sortI = np.argsort(_means)
+    s_means = np.array(means)[sortI]
+    s_names = np.array(names)[sortI]
+    for i in range(len(names)):
+        print(s_names[i], " - ", s_means[i])
+    print("end")
+        
 
 def main():
     # makeBarChart(ref_paths, pathsDict, False)
@@ -265,6 +294,8 @@ def main():
     DataPaths("ConvNeXt", convnext_paths),
     DataPaths("Org best", org_bests_paths),
     DataPaths("Org best 2", best2_paths),
+    DataPaths("Org best 3", best3_paths),
+    DataPaths("Org best 4", best4_paths),
 ], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
 
 

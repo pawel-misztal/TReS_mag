@@ -14,7 +14,7 @@ class Koniq10kData(Dataset):
   mos - higher is better 0-5 -> 0-1\n
   real distortions
   """
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed=2137) -> None:
     super().__init__()
     self.train = train
     self.path = path
@@ -31,7 +31,7 @@ class Koniq10kData(Dataset):
     self.indexes = np.arange(start=0, stop=length) 
 
 
-    i_train, i_test = train_test_split(self.indexes, test_size=testSize, random_state=21, shuffle=True)
+    i_train, i_test = train_test_split(self.indexes, test_size=testSize, random_state=seed, shuffle=True)
 
     self.indexes = i_train if train else i_test
     
@@ -54,6 +54,6 @@ class Koniq10kData(Dataset):
     if(self.normalize):
       mos = mos / 5.0
 
-    mos = torch.tensor(mos)
+    mos = torch.tensor(mos, dtype=torch.float32).unsqueeze(0)
 
     return (img, mos)

@@ -80,7 +80,8 @@ def getBestsModels(checkpointsFolder:Path|str=None, resoults:int = -1, sort:Lite
                 epoch = stats.get("eval_epoch")[np.array(stats.get("eval_mae")).argmin()]
                 n = mae
             pathjson = str(p.name)
-            pathpy = stats.get("init_data",{}).get("start_file_path")
+            pathpy:str = stats.get("init_data",{}).get("start_file_path")
+            pathpy = pathpy.replace("\\","/")
             pathpy = Path(pathpy).name if pathpy else None
 
             _, pval = sstats.ttest_1samp(refs, n)

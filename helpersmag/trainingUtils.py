@@ -42,6 +42,26 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         trainDataset = Kadid10kDataset(KADID10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         testDataset = Kadid10kDataset(KADID10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         return trainDataset, testDataset
+    
+
+    if(initData.dataset == 'biq2021'):
+        from Datasets.BIQ2021Dataset import BIQ2021Dataset, BIQ2021_PATH
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = BIQ2021Dataset(BIQ2021_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = BIQ2021Dataset(BIQ2021_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
+    
+    if(initData.dataset == 'koniq10k'):
+        from Datasets.Koniq10kDataset import Koniq10kData, KONIQ10K_PATH
+        if(trainTransList):
+            trainTransList.insert(2,v2.Resize((512, 384)))
+            testTransList.insert(2,v2.Resize((512, 384)))
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
 
     raise Exception(f"not supported dataset '{initData.dataset}'")
 
