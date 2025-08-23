@@ -48,8 +48,8 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         from Datasets.BIQ2021Dataset import BIQ2021Dataset, BIQ2021_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = BIQ2021Dataset(BIQ2021_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = BIQ2021Dataset(BIQ2021_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = BIQ2021Dataset(BIQ2021_PATH, True,trainTrans,seed=initData.seed)
+        testDataset = BIQ2021Dataset(BIQ2021_PATH, False,testTrans,seed=initData.seed)
         return trainDataset, testDataset
     
     if(initData.dataset == 'koniq10k'):
