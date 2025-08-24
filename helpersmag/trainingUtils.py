@@ -62,6 +62,15 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         return trainDataset, testDataset
+    
+
+    if(initData.dataset == 'zkoniq10k'):
+        from Datasets.Koniq10kDataset import Koniq10kData, KONIQ10K_PATH
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True)
+        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True)
+        return trainDataset, testDataset
 
     raise Exception(f"not supported dataset '{initData.dataset}'")
 
