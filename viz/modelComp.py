@@ -179,7 +179,7 @@ def add_label(bars):
                 bbox=dict(facecolor='white', alpha=0.5, edgecolor="none"),
                 rotation = 0)
 
-def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, title = "",firstBase = True):
+def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, title = "",firstBase = True, labelAnle = 45):
     refs = loadDatas(ref_paths) if ref_paths != None else None
 
     datas:List[List[Tuple[float, float, InitData]]] = []
@@ -188,17 +188,25 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
         datas.append(perf)
 
 
-    means = []
+    means_srcc = []
+    means_plcc = []
     _means = []
-    medians = []
+    # medians = []
     names = [pd.name for pd in pathsDict]
-    ref_srccs:np.ndarray[float] = np.array([t[0] for t in refs]) if refs else None
+    ref_srccs:np.ndarray[float]
+    ref_plcc:np.ndarray[float]
+    ref_srccs,ref_plcc = np.array([(t[0],t[1]) for t in refs]) if refs else (None,None)
     for d in datas:
-        srccs:np.ndarray[float] = np.array([t[0] for t in d])
-        menadiff = srccs.mean() - ref_srccs.mean() if refs else srccs.mean()
-        means.append(menadiff)
-        medianDiff = np.median(srccs) - np.median(ref_srccs) if refs else np.median(srccs)
-        medians.append(medianDiff)
+        srccs:np.ndarray[float]
+        plcc:np.ndarray[float]
+        srccs = np.array([t[0]for t in d])
+        plcc = np.array([t[1]for t in d])
+        mean_diff_srcc = srccs.mean() - ref_srccs.mean() if refs else srccs.mean()
+        mean_diff_plcc = plcc.mean() - ref_plcc.mean() if refs else plcc.mean()
+        means_srcc.append(mean_diff_srcc)
+        means_plcc.append(mean_diff_plcc)
+        # medianDiff = np.median(srccs) - np.median(ref_srccs) if refs else np.median(srccs)
+        # medians.append(medianDiff)
         srccs.sort()
         srccs = srccs[1:-1]
         _means.append(srccs.mean())
@@ -213,28 +221,35 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
     brMedian = np.array([x + barW for x in brMean])
 
     if(sort): # sort
-        sortI = np.argsort(means)
-        means = np.array(means)[sortI]
+        sortI = np.argsort(means_srcc)
+        means_srcc = np.array(means_srcc)[sortI]
         medians = np.array(medians)[sortI]
         names = np.array(names)[sortI]
 
-    bars_mean = plt.bar(brMean, means, barW, edgecolor = "black", color='lightblue',hatch="//", label="średnia")
-    bars_median = plt.bar(brMedian, medians, barW, edgecolor = "black", color="wheat",hatch="\\\\", label="mediana")
+    bars_mean = plt.bar(brMean, means_srcc, barW, edgecolor = "black", color='lightblue',hatch="//", label="SROCC")
+    # bars_median = plt.bar(brMedian, medians, barW, edgecolor = "black", color="wheat",hatch="\\\\", label="mediana")
+    bars_mean_plcc = plt.bar(brMedian, means_plcc, barW, edgecolor = "black", color="wheat",hatch="\\\\", label="PLCC")
 
-    min_val = np.min([means, medians])
-    max_val = np.max([means, medians])
+    # min_val = np.min([means_srcc, medians])
+    min_val = np.min([means_srcc, means_plcc])
+    # max_val = np.max([means_srcc, medians])
+    max_val = np.max([means_srcc, means_plcc])
     dminmax = np.abs(max_val - min_val)
 
     add_label(bars_mean)
-    add_label(bars_median)
+    # add_label(bars_median)
+    add_label(bars_mean_plcc)
 
     if(firstBase):
-        ref = np.array([t[0] for t in datas[0]])
+        ref_srcc = np.array([t[0] for t in datas[0]])
+        ref_plcc = np.array([t[1] for t in datas[0]])
+        # ref = np.array([t[0] for t in datas[0]]) 
         # plt.axhline(ref.mean(),np.min(brMean),np.max(brMedian), color='lightblue', linestyle='--')
-        plt.hlines([ref.mean(),np.median(ref)],[np.min(brMean)], [np.max(brMedian)], colors=['dodgerblue','darkorange'],linestyles=['--','--'])
+        plt.hlines([ref_srcc.mean(),ref_plcc.mean()],[np.min(brMean)], [np.max(brMedian)], colors=['dodgerblue','darkorange'],linestyles=['--','--'])
+        # plt.hlines([ref.mean(),np.median(ref)],[np.min(brMean)], [np.max(brMedian)], colors=['dodgerblue','darkorange'],linestyles=['--','--'])
 
-    plt.ylabel("Różnica SROCC")
-    plt.xticks([r + barW/2 for r in range(len(names))], names, rotation = 80)
+    plt.ylabel("Wydajność")
+    plt.xticks([r + barW/2 for r in range(len(names))], names, rotation = labelAnle)
 
     plt.legend() #loc="upper right"
     plt.title(title,pad=20)
@@ -245,7 +260,7 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
 
     print("data")
     sortI = np.argsort(_means)
-    s_means = np.array(means)[sortI]
+    s_means = np.array(means_srcc)[sortI]
     s_names = np.array(names)[sortI]
     for i in range(len(names)):
         print(s_names[i], " - ", s_means[i])
@@ -254,49 +269,58 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
 
 def main():
     # makeBarChart(ref_paths, pathsDict, False)
-    makeBarChart(None, [
-    DataPaths("Bez zmian", ref_paths),
-    DataPaths("Bez dodatkowego\n dropout'u", ed_f_paths),
-    DataPaths("Bez enkodowania\n pozycji co warstwę", mape_f_paths),
-    DataPaths("Bez normalizacji\n przed", nb_f_paths),
-    DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
-], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
-    
-    makeBarChart(None, [
-    DataPaths("Oryginalna funkcja straty", ref_paths),
-    DataPaths("Dynamiczna strata\n marginesu", dml_paths),
-    DataPaths("Dynamiczna strata\n tripletu", dtl_paths),
-], False,"Wpływ funkcji straty na względną wydajność modelu", True)
-    
-    makeBarChart(None, [
-    DataPaths("Resnet 50", ref_paths),
-    DataPaths("Effnetb4", effnet_paths),
-    DataPaths("ConvNeXt", convnext_paths),
-], False, "Wpływ pretrenowanej sieci konwolucyjnej na względną wydajność modelu", True)
-    
-
-    makeBarChart(None, [
-    DataPaths("dropout 0.5", ref_paths),
-    DataPaths("dropout 0.1", dr02_paths),
-], False, "Wpływ wartości dropout w transformatorze\nna względną wydajność modelu", True)
+#     makeBarChart(None, [
+#     DataPaths("Bez zmian", ref_paths),
+#     DataPaths("Bez dodatkowego\n dropout'u", ed_f_paths),
+#     DataPaths("Bez enkodowania\n pozycji co warstwę", mape_f_paths),
+#     DataPaths("Bez normalizacji\n przed", nb_f_paths),
+#     DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
+# ], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
     
 
     makeBarChart(None, [
     DataPaths("Bez zmian", ref_paths),
-    DataPaths("Bez dodatkowego\n dropout'u", ed_f_paths),
+    # DataPaths("Bez dodatkowego\n dropout'u", ed_f_paths),
     DataPaths("Bez enkodowania\n pozycji co warstwę", mape_f_paths),
     DataPaths("Bez normalizacji\n przed", nb_f_paths),
-    DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
-    DataPaths("Dynamiczna strata\n marginesu", dml_paths),
-    DataPaths("Dynamiczna strata\n tripletu", dtl_paths),
-    DataPaths("dropout 0.1", dr02_paths),
-    DataPaths("Effnetb4", effnet_paths),
-    DataPaths("ConvNeXt", convnext_paths),
-    DataPaths("Org best", org_bests_paths),
-    DataPaths("Org best 2", best2_paths),
-    DataPaths("Org best 3", best3_paths),
-    DataPaths("Org best 4", best4_paths),
-], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
+    # DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
+], False, "", True, 0)
+    
+#     makeBarChart(None, [
+#     DataPaths("Oryginalna funkcja straty", ref_paths),
+#     DataPaths("Dynamiczna strata\n marginesu", dml_paths),
+#     DataPaths("Dynamiczna strata\n tripletu", dtl_paths),
+# ], False,"Wpływ funkcji straty na względną wydajność modelu", True)
+    
+#     makeBarChart(None, [
+#     DataPaths("Resnet 50", ref_paths),
+#     DataPaths("Effnetb4", effnet_paths),
+#     DataPaths("ConvNeXt", convnext_paths),
+# ], False, "Wpływ pretrenowanej sieci konwolucyjnej na względną wydajność modelu", True)
+    
+
+#     makeBarChart(None, [
+#     DataPaths("dropout 0.5", ref_paths),
+#     DataPaths("dropout 0.1", dr02_paths),
+# ], False, "Wpływ wartości dropout w transformatorze\nna względną wydajność modelu", True)
+    
+
+#     makeBarChart(None, [
+#     DataPaths("Bez zmian", ref_paths),
+#     DataPaths("Bez dodatkowego\n dropout'u", ed_f_paths),
+#     DataPaths("Bez enkodowania\n pozycji co warstwę", mape_f_paths),
+#     DataPaths("Bez normalizacji\n przed", nb_f_paths),
+#     DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
+#     DataPaths("Dynamiczna strata\n marginesu", dml_paths),
+#     DataPaths("Dynamiczna strata\n tripletu", dtl_paths),
+#     DataPaths("dropout 0.1", dr02_paths),
+#     DataPaths("Effnetb4", effnet_paths),
+#     DataPaths("ConvNeXt", convnext_paths),
+#     DataPaths("Org best", org_bests_paths),
+#     DataPaths("Org best 2", best2_paths),
+#     DataPaths("Org best 3", best3_paths),
+#     DataPaths("Org best 4", best4_paths),
+# ], False, "Wpływ modyfikacji transformera modelu, na względną wydajność", True)
 
 
 

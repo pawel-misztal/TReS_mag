@@ -219,6 +219,12 @@ def prepareLossFn(initData:InitData) -> nn.Module:
         return PaperLoss(b_coef_1=initData.loss_weights.get("b_coef_1", 0.5), #relative ranking, self consis
                          b_coef_2=initData.loss_weights.get("b_coef_2", 0.05), #relative ranking
                          b_coef_3=initData.loss_weights.get("b_coef_3", 1)) #self conis
+
+    if(initData.loss_fn == "PaperLossDML"):
+        from tres.paperLoss import PaperLossDML
+        return PaperLossDML(b_coef_1=initData.loss_weights.get("b_coef_1", 0.5), #relative ranking, self consis
+                         b_coef_2=initData.loss_weights.get("b_coef_2", 0.05), #relative ranking
+                         b_coef_3=initData.loss_weights.get("b_coef_3", 1)) #self conis
     
     raise Exception(f"invalid loss_fn:'{initData.loss_fn}'")
 
