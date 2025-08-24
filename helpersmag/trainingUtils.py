@@ -98,7 +98,7 @@ def prepareTransforms(initData:InitData) -> Tuple[List[nn.Module],List[nn.Module
             v2.RandomHorizontalFlip(0.5),
             v2.RandomVerticalFlip(0.5),
             # v2.RandomCrop((224,224)),
-            v2.RandomApply(v2.RandomRotation(degrees=(-25,25),expand=False),0.5),
+            v2.RandomApply([v2.RandomRotation(degrees=(-25,25),expand=False)],0.5),
             v2.RandomResizedCrop(size=(224,224),scale=(0.1,1),ratio=(1,1)),
             v2.ToTensor(),
             v2.Normalize(mean=(0.485,0.456,0.406), std=(0.229,0.224,0.225))
