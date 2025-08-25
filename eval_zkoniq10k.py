@@ -9,7 +9,7 @@ initData = InitData(__file__,
                     dataset='zkoniq10k',
                     seed=seed,
                     batch_size=16,
-                    epoch_count=200, 
+                    epoch_count=50, 
                     eval_every_epoch=5,
                     mhsa_add_pose_everyLayer=True,
                     normalize_before=True,
@@ -19,7 +19,7 @@ initData = InitData(__file__,
                     mhsa_dropout=0.1,
                     lr_scheluder={
                         "name":"StepLR",
-                        "step_size":100,
+                        "step_size":20,
                         "gamma":0.1
                     },
                     loss_fn="MAExDynamicMarginRankingLoss",
@@ -32,5 +32,6 @@ initData = InitData(__file__,
                     optimizerStepEvery=2,
                     l2_pool_paper=True,
                     cnn_model="convnext_tiny",
-                    lr=1e-5)
+                    lr=1e-5,
+                    weight_decay=1e-4)
 train(initData,test=False)

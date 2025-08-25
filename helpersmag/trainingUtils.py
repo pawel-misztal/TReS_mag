@@ -241,10 +241,10 @@ def loadCheckpoint(path:Path|str, model:nn.Module, optimizer:torch.optim.Optimiz
         scheluder.load_state_dict(checkpoint["scheluder"])
 
 def getSeed() -> int:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="seed parser")
     parser.add_argument("--seed", "-s", dest="seed", type=int,default=2137,help="seed for initialize")
 
-    parsed = parser.parse_args()
+    parsed, unknown = parser.parse_known_args()
     seed = parsed.seed
     print("Starting with seed:",seed)
     return seed

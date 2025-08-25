@@ -2,14 +2,14 @@ import argparse
 from typing import Tuple
 
 def parseCheckpointArgs() -> Tuple[str,str]:
-    args = argparse.ArgumentParser()
+    args = argparse.ArgumentParser(description="checkpoint parser")
     args.add_argument("--checkpointPath", "-cp" ,dest="checkpointPath", type=str,
                       default=None,
                       help="path to the last checkpoint .pth")
     args.add_argument("--jsonCheckpointPath", "-jcp", dest="jsonCheckpointPath", type=str,
                       default=None,
                       help="path to the .json")
-    parsed_args = args.parse_args()
+    parsed_args, unknown = args.parse_known_args()
     return parsed_args.checkpointPath, parsed_args.jsonCheckpointPath
 
 

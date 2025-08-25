@@ -1,6 +1,7 @@
 from helpersmag.initData import InitData
 from trainModel import main as train
 
+
 initData = InitData(__file__,
                     "Tres", 
                     dataset='zkoniq10k',
