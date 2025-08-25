@@ -122,7 +122,7 @@ def parseArgs() :
                       help="sort by which parameter, default 'srcc'", choices=["mae","srcc","plcc"])
     args.add_argument("--dataset", "-d", dest="dataset", type=str,
                       default=None,
-                      help="dataset, default '' means all", choices=["","clive","kadid10k"])
+                      help="dataset, default '' means all", choices=["","clive","kadid10k","koniq10k","zkoniq10k"])
     args.add_argument("--smoothAmount", "-sa", dest="smoothAmount", type=int,
                       default=None,
                       help="if set the best results will be smoothed to minimize luck value")
