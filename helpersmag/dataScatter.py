@@ -35,12 +35,16 @@ def plotres(srcc:List[float], preds:List[List[float]], initData:Dict[str,any]=No
     reg1 = np.poly1d(np.polyfit(lbl, pred, deg=1))(indexes)
     # reg2 = np.poly1d(np.polyfit(lbl, pred, deg=2))(indexes)
 
+    plt.rcParams["font.family"] = "Times New Roman"
+    plt.rcParams["font.size"] = 14
     plt.figure(figsize=size)
     plt.scatter(lbl, pred)
-    plt.plot(indexes,reg1,color="k", alpha=0.5, linestyle='--', linewidth=1)
+    # plt.plot(indexes,reg1,color="k", alpha=0.5, linestyle='--', linewidth=1)
     # plt.plot(indexes,reg2,color="c", alpha=0.5, linestyle='--', linewidth=1)
-    plt.xlabel("target")
-    plt.ylabel("pred")
+    plt.xlabel("wartość docelowa")
+    plt.ylabel("wartość przewidywana")
+    plt.xlim(0, 100) 
+    plt.ylim(0, max(100, pred.max() + pred.max() * 0.1))
     plt.plot(indexes,indexes, color="b")
     # plt.show()
 

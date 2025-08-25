@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Tuple, List, Literal
 import random
 import numpy as np
+import argparse
 
 from typing import List, Tuple
 
@@ -238,3 +239,12 @@ def loadCheckpoint(path:Path|str, model:nn.Module, optimizer:torch.optim.Optimiz
                 state[k] = v.to(device)
     if(checkpoint["scheluder"]):
         scheluder.load_state_dict(checkpoint["scheluder"])
+
+def getSeed() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", "-s", dest="seed", type=int,default=2137,help="seed for initialize")
+
+    parsed = parser.parse_args()
+    seed = parsed.seed
+    print("Starting with seed:",seed)
+    return seed
