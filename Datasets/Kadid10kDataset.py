@@ -43,7 +43,10 @@ class Kadid10kDataset(Dataset):
 
     # Znajdujemy unikalne referencje i dzielimy je na train/test
     unique_refs = np.unique(ref_ids)
+    # print(unique_refs)
     ref_train, ref_test = train_test_split(unique_refs, test_size=testSize, random_state=seed, shuffle=True)
+    # print(ref_test)
+    # print(ref_train)
 
     # Tworzymy maskę do filtrowania pełnych danych
     if train:
@@ -52,6 +55,7 @@ class Kadid10kDataset(Dataset):
         selected_mask = np.isin(ref_ids, ref_test)
 
     self.images = self.images[selected_mask]
+    # print(self.images)
     self.mos = self.mos[selected_mask]
     self.transform = transform
     self.load_img = loadImg
@@ -80,3 +84,14 @@ class Kadid10kDataset(Dataset):
     mos = torch.tensor(mos, dtype=torch.float32).unsqueeze(0)
 
     return (img, mos)
+  
+
+if __name__ == "__main__":
+  testDataset = Kadid10kDataset(KADID10K_PATH, False, None, normalize= False, loadImg=False)
+  i = 0
+  for t in testDataset:
+    i += 1
+    print(t[1])
+
+    if i > 10: 
+      break
