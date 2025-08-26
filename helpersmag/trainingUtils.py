@@ -28,6 +28,14 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
     returns [trainDataset, testDataset] 
     throws error if dataset is not valid
     """
+    if(initData.dataset == 'live'):
+        from Datasets.LiveDataset import LIVEDataset, LIVE_PATH
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = LIVEDataset(LIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = LIVEDataset(LIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
+    
     if(initData.dataset == 'clive'):
         from Datasets.CLIVEDataset import CLIVEDataset, CLIVE_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
@@ -73,6 +81,17 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True)
         return trainDataset, testDataset
 
+    if(initData.dataset == "bid"):
+        from Datasets.BIDDataset import BIDDataset, BID_PATH
+        if(trainTransList):
+            trainTransList.insert(2,v2.Resize(512))
+            testTransList.insert(2,v2.Resize(512))
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = BIDDataset(BID_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = BIDDataset(BID_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
+
     raise Exception(f"not supported dataset '{initData.dataset}'")
 
 def prepareTransforms(initData:InitData) -> Tuple[List[nn.Module],List[nn.Module]]:
@@ -110,7 +129,7 @@ def prepareTransforms(initData:InitData) -> Tuple[List[nn.Module],List[nn.Module
             v2.RandomHorizontalFlip(0.5),
             v2.RandomVerticalFlip(0.5),
             # v2.RandomCrop((224,224)),
-            v2.RandomApply(v2.RandomRotation(degrees=(-25,25),expand=False),0.5),
+            # v2.RandomApply(v2.RandomRotation(degrees=(-25,25),expand=False),0.5),
             v2.RandomResizedCrop(size=(224,224),scale=(0.2,1),ratio=(1,1)),
             v2.ToTensor(),
             v2.Normalize(mean=(0.485,0.456,0.406), std=(0.229,0.224,0.225))

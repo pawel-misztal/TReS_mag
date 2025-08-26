@@ -7,6 +7,7 @@ import Datasets.CISQDataset as cisq
 import Datasets.Kadid10kDataset as kadid
 import Datasets.Koniq10kDataset as koniq
 import Datasets.TID2013Dataset as tid
+import Datasets.BIDDataset as bid
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path
 import numpy as np
@@ -48,13 +49,18 @@ def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, m
 
 
 
-train = biq.BIQ2021Dataset(biq.BIQ2021_PATH,True)
-test = biq.BIQ2021Dataset(biq.BIQ2021_PATH,False)
-printHist(train, test, "BIQ2021",0,1,20,"MOS")
+# train = biq.BIQ2021Dataset(biq.BIQ2021_PATH,True)
+# test = biq.BIQ2021Dataset(biq.BIQ2021_PATH,False)
+# printHist(train, test, "BIQ2021",0,1,20,"MOS")
 
-# train = live.LIVEDataset(live.LIVE_PATH,True,normalize=False)
-# test = live.LIVEDataset(live.LIVE_PATH,False,normalize=False)
-# printHist(train, test, "LIVE",0,101,20,"DMOS")
+
+train = bid.BIDDataset(bid.BID_PATH,True,loadImg=False)
+test = bid.BIDDataset(bid.BID_PATH,False,loadImg=False)
+printHist(train, test, "BID",0,5,20,"MOS")
+
+train = live.LIVEDataset(live.LIVE_PATH,True,normalize=False,load_img=False)
+test = live.LIVEDataset(live.LIVE_PATH,False,normalize=False,load_img=False)
+printHist(train, test, "LIVE",0,101,20,"DMOS")
 
 
 # train = cisq.CISQDataset(cisq.CISQ_PATH ,True)
