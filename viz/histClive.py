@@ -13,8 +13,6 @@ from pathlib import Path
 import numpy as np
 from typing import Literal
 
-train = clive.CLIVEDataset(clive.CLIVE_PATH,True,normalize=False)
-test = clive.CLIVEDataset(clive.CLIVE_PATH,False,normalize=False)
 
 
 
@@ -37,7 +35,7 @@ def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, m
     # plt.xticks(range(min,max,step))
     plt.xlabel(f"wartości {mosDmos} obrazów")
     plt.ylabel("liczba obrazów")
-    plt.title("Histogram wartości zbioru danych " + datasetName, fontsize=14*2)
+    # plt.title("Histogram wartości zbioru danych " + datasetName, fontsize=14*2)
 
     p = Path("viz/hist")
     if(p.exists() == False):
@@ -45,38 +43,41 @@ def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, m
 
     plt.savefig( p / (datasetName + ".png"))
     print("saved")
-# printHist(train, test, "CLIVE",0,101,20)
+
+train = clive.CLIVEDataset(clive.CLIVE_PATH,True,normalize=False,load_img=False)
+test = clive.CLIVEDataset(clive.CLIVE_PATH,False,normalize=False,load_img=False)
+printHist(train, test, "CLIVE",0,101,20)
 
 
 
-# train = biq.BIQ2021Dataset(biq.BIQ2021_PATH,True)
-# test = biq.BIQ2021Dataset(biq.BIQ2021_PATH,False)
+# train = biq.BIQ2021Dataset(biq.BIQ2021_PATH,True,load_img=False)
+# test = biq.BIQ2021Dataset(biq.BIQ2021_PATH,False,load_img=False)
 # printHist(train, test, "BIQ2021",0,1,20,"MOS")
 
 
-train = bid.BIDDataset(bid.BID_PATH,True,loadImg=False)
-test = bid.BIDDataset(bid.BID_PATH,False,loadImg=False)
-printHist(train, test, "BID",0,5,20,"MOS")
+# train = bid.BIDDataset(bid.BID_PATH,True,loadImg=False)
+# test = bid.BIDDataset(bid.BID_PATH,False,loadImg=False)
+# printHist(train, test, "BID",0,5,20,"MOS")
 
-train = live.LIVEDataset(live.LIVE_PATH,True,normalize=False,load_img=False)
-test = live.LIVEDataset(live.LIVE_PATH,False,normalize=False,load_img=False)
-printHist(train, test, "LIVE",0,101,20,"DMOS")
+# train = live.LIVEDataset(live.LIVE_PATH,True,normalize=False,load_img=False)
+# test = live.LIVEDataset(live.LIVE_PATH,False,normalize=False,load_img=False)
+# printHist(train, test, "LIVE",0,101,20,"DMOS")
 
 
-# train = cisq.CISQDataset(cisq.CISQ_PATH ,True)
-# test = cisq.CISQDataset(cisq.CISQ_PATH,False)
+# train = cisq.CISQDataset(cisq.CISQ_PATH ,True,load_img=False)
+# test = cisq.CISQDataset(cisq.CISQ_PATH,False,load_img=False)
 # printHist(train, test, "CISQ",0,1,20,"DMOS")
 
 
-# train = kadid.Kadid10kDataset(kadid.KADID10K_PATH ,True,normalize=False)
-# test = kadid.Kadid10kDataset(kadid.KADID10K_PATH,False,normalize=False)
-# printHist(train, test, "Kadid10k",1,5,20,"MOS")
+# train = kadid.Kadid10kDataset(kadid.KADID10K_PATH ,True,normalize=False, loadImg=False)
+# test = kadid.Kadid10kDataset(kadid.KADID10K_PATH,False,normalize=False, loadImg=False)
+# printHist(train, test, "Kadid10k",1,5,20,"DMOS")
 
 
-# train = koniq.Koniq10kData(koniq.KONIQ10K_PATH ,True,normalize=False)
-# test = koniq.Koniq10kData(koniq.KONIQ10K_PATH,False,normalize=False)
+# train = koniq.Koniq10kData(koniq.KONIQ10K_PATH ,True,normalize=False, loadImg=False)
+# test = koniq.Koniq10kData(koniq.KONIQ10K_PATH,False,normalize=False, loadImg=False)
 # printHist(train, test, "Koniq10k",1,5,20,"MOS")
 
-# train = tid.TID2013Dataset(tid.TID2013_PATH ,True,normalize=False)
-# test = tid.TID2013Dataset(tid.TID2013_PATH,False,normalize=False)
+# train = tid.TID2013Dataset(tid.TID2013_PATH ,True,normalize=False,load_img=False)
+# test = tid.TID2013Dataset(tid.TID2013_PATH,False,normalize=False,load_img=False)
 # printHist(train, test, "TID2013",0,9,20,"MOS")

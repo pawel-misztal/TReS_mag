@@ -15,7 +15,7 @@ class CLIVEDataset(Dataset):
   mos - higher is better 0-100 -> 0-1\n
   real distortions
   """
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed:int=21) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed:int=21, load_img = True) -> None:
     super().__init__()
     self.train = train
     self.path = path
@@ -51,6 +51,7 @@ class CLIVEDataset(Dataset):
     self.indexes = i_train if train else i_test
     
     self.transform = transform
+    self.load_img = load_img
 
   def __len__(self):
     return len(self.indexes)  
@@ -61,10 +62,13 @@ class CLIVEDataset(Dataset):
     mos = self.AllMOS["AllMOS_release"][0][i]
 
     # print(img_path)
-    img = Image.open(img_path)
+    if self.load_img:
+      img = Image.open(img_path)
 
-    if(self.transform != None):
-      img = self.transform(img)
+      if(self.transform != None):
+        img = self.transform(img)
+    else:
+      img = None
 
     if(self.normalize):
       mos = mos / 100.0

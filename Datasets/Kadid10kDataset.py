@@ -11,7 +11,7 @@ KADID10K_PATH = Path("/home/mrpaw/Documents/mag_databases/KADID-10k/kadid10k")
 
 class Kadid10kDataset(Dataset):
   """
-  mos - higher is better 0-5 -> 0-1\n
+  dmos - higher is better 0-5 -> 0-1\n
   artificial distortions
   """
   def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, normalize = True, seed:int=21, loadImg=True) -> None:

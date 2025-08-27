@@ -34,7 +34,7 @@ class CISQDataset(Dataset):
     "contrast": "contrast"
   }
 
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, load_img = True) -> None:
     super().__init__()
     self.train = train
     self.path = path
@@ -52,6 +52,7 @@ class CISQDataset(Dataset):
     self.indexes = i_train if train else i_test
     
     self.transform = transform
+    self.load_img = load_img
 
   def __len__(self):
     return len(self.indexes)  
@@ -64,11 +65,13 @@ class CISQDataset(Dataset):
     dmos = self.data["dmos"][i]
     img_path = self.imgsPaths / self.csvToFolder[distortType] / f"{imgName}.{self.csvToFile[distortType]}.{distortAmount}.png"
 
-    img = Image.open(img_path)
+    if self.load_img:
+      img = Image.open(img_path)
 
-    if(self.transform != None):
-      img = self.transform(img)
-
+      if(self.transform != None):
+        img = self.transform(img)
+    else: 
+      img = None
 
     dmos = torch.tensor(dmos)
 

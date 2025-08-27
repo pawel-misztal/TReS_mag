@@ -17,7 +17,7 @@ class BIQ2021Dataset(Dataset):
   mos - higher is better 0-1\n
   real distortions
   """
-  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, seed = 2137) -> None:
+  def __init__(self, path:Path, train:bool, transform:torch.nn.Module = None, testSize = 0.2, seed = 2137,load_img=True) -> None:
     super().__init__()
     self.train = train
     self.path = path
@@ -46,6 +46,7 @@ class BIQ2021Dataset(Dataset):
     # self.indexes = np.arange(start=0, stop=length) 
     
     self.transform = transform
+    self.load_img = load_img
 
   def __len__(self):
     return len(self.indexes)  
@@ -55,10 +56,13 @@ class BIQ2021Dataset(Dataset):
     img_path = self.imagesPath / self.images[i]
     mos = self.mos[i]
 
-    img = Image.open(img_path)
+    if self.load_img:
+      img = Image.open(img_path)
 
-    if(self.transform != None):
-      img = self.transform(img)
+      if(self.transform != None):
+        img = self.transform(img)
+    else:
+      img = None
 
     mos = torch.tensor(mos, dtype=torch.float32).unsqueeze(0)
 
