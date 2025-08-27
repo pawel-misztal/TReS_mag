@@ -84,12 +84,20 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
     if(initData.dataset == "bid"):
         from Datasets.BIDDataset import BIDDataset, BID_PATH
         if(trainTransList):
-            trainTransList.insert(2,v2.Resize(512))
-            testTransList.insert(2,v2.Resize(512))
+            trainTransList.insert(2,v2.Resize(size=None,max_size=512))
+            testTransList.insert(0,v2.Resize(size=None,max_size=512))
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
         trainDataset = BIDDataset(BID_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         testDataset = BIDDataset(BID_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
+    
+    if(initData.dataset == 'tid2013'):
+        from Datasets.TID2013Dataset import TID2013Dataset, TID2013_PATH
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = TID2013Dataset(TID2013_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = TID2013Dataset(TID2013_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         return trainDataset, testDataset
 
     raise Exception(f"not supported dataset '{initData.dataset}'")
