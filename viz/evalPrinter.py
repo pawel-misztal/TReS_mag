@@ -71,6 +71,8 @@ def getBestsModels(dataset:Literal["","clive","kadid10k"], name:str, targetseed:
     print("----------------------------------------------")
     print(df)
     print("----------------------------------------------")
+    print("len",len(df))
+    print("----------------------------------------------")
     print("mae ", df["mae"].values)
     print("srcc ", df["srcc"].values)
     print("plcc ", df["plcc"].values)
@@ -86,15 +88,15 @@ def parseArgs() :
     args = argparse.ArgumentParser()
     args.add_argument("--dataset", "-d", dest="dataset", type=str,
                       default=None,
-                      help="dataset, default '' means all", choices=["","clive","kadid10k","bid","tid2013","live","zkoniq10k"])
+                      help="dataset, default '' means all", choices=["","clive","kadid10k","bid","tid2013","live","zkoniq10k","cisq"])
     args.add_argument("--name", "-n", dest="name", type=str,
-                      default=None,
+                      default="eval",
                       help="name of the file to filter with")
     args.add_argument("--path", "-p", dest="path", type=str,
                       default=None,
                       help="path to folder with checkpoints")
     args.add_argument("--seed", "-s", dest="seed", type=str,
-                      default=None,
+                      default="2137",
                       help="seed to filter with, act as string")
     
     args.add_argument("--error", "-e", dest="error",action='store_true',
@@ -105,7 +107,7 @@ def parseArgs() :
 
 if __name__ == "__main__":
     """
-    python3 -m  helpersmag.getBestsModels -h
+    python3 evalPrinter.py -d cisq
     """
     dataset, name, seed, error= parseArgs()
 
