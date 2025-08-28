@@ -43,6 +43,15 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         trainDataset = CLIVEDataset(CLIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         testDataset = CLIVEDataset(CLIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
         return trainDataset, testDataset
+    
+
+    if(initData.dataset == 'cisq'):
+        from Datasets.CISQDataset import CISQDataset, CISQ_PATH
+        trainTrans = v2.Compose(trainTransList) if trainTransList else None
+        testTrans = v2.Compose(testTransList) if testTransList else None
+        trainDataset = CISQDataset(CISQ_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        testDataset = CISQDataset(CISQ_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        return trainDataset, testDataset
 
     if(initData.dataset == 'kadid10k'):
         from Datasets.Kadid10kDataset import Kadid10kDataset, KADID10K_PATH
