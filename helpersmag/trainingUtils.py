@@ -23,7 +23,7 @@ import argparse
 from typing import List, Tuple
 
 
-def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransList:List[nn.Module]) -> Tuple[Dataset, Dataset]:
+def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransList:List[nn.Module], load_img = True) -> Tuple[Dataset, Dataset]:
     """
     returns [trainDataset, testDataset] 
     throws error if dataset is not valid
@@ -32,16 +32,16 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         from Datasets.LiveDataset import LIVEDataset, LIVE_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = LIVEDataset(LIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = LIVEDataset(LIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = LIVEDataset(LIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
+        testDataset = LIVEDataset(LIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
         return trainDataset, testDataset
     
     if(initData.dataset == 'clive'):
         from Datasets.CLIVEDataset import CLIVEDataset, CLIVE_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = CLIVEDataset(CLIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = CLIVEDataset(CLIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = CLIVEDataset(CLIVE_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
+        testDataset = CLIVEDataset(CLIVE_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
         return trainDataset, testDataset
     
 
@@ -49,16 +49,16 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         from Datasets.CISQDataset import CISQDataset, CISQ_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = CISQDataset(CISQ_PATH, True,trainTrans,seed=initData.seed)
-        testDataset = CISQDataset(CISQ_PATH, False,testTrans,seed=initData.seed)
+        trainDataset = CISQDataset(CISQ_PATH, True,trainTrans,seed=initData.seed, load_img=load_img)
+        testDataset = CISQDataset(CISQ_PATH, False,testTrans,seed=initData.seed, load_img=load_img)
         return trainDataset, testDataset
 
     if(initData.dataset == 'kadid10k'):
         from Datasets.Kadid10kDataset import Kadid10kDataset, KADID10K_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = Kadid10kDataset(KADID10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = Kadid10kDataset(KADID10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = Kadid10kDataset(KADID10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
+        testDataset = Kadid10kDataset(KADID10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
         return trainDataset, testDataset
     
 
@@ -66,8 +66,8 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         from Datasets.BIQ2021Dataset import BIQ2021Dataset, BIQ2021_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = BIQ2021Dataset(BIQ2021_PATH, True,trainTrans,seed=initData.seed)
-        testDataset = BIQ2021Dataset(BIQ2021_PATH, False,testTrans,seed=initData.seed)
+        trainDataset = BIQ2021Dataset(BIQ2021_PATH, True,trainTrans,seed=initData.seed, load_img=load_img)
+        testDataset = BIQ2021Dataset(BIQ2021_PATH, False,testTrans,seed=initData.seed, load_img=load_img)
         return trainDataset, testDataset
     
     if(initData.dataset == 'koniq10k'):
@@ -77,8 +77,8 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         #     testTransList.insert(2,v2.Resize((512, 384)))
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
+        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
         return trainDataset, testDataset
     
 
@@ -86,8 +86,8 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
         from Datasets.Koniq10kDataset import Koniq10kData, KONIQ10K_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True)
-        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True)
+        trainDataset = Koniq10kData(KONIQ10K_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True, loadImg=load_img)
+        testDataset = Koniq10kData(KONIQ10K_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized,mos_z=True, loadImg=load_img)
         return trainDataset, testDataset
 
     if(initData.dataset == "bid"):
@@ -97,16 +97,16 @@ def prepareDataset(initData:InitData, trainTransList:List[nn.Module], testTransL
             testTransList.insert(0,v2.Resize(size=None,max_size=512))
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = BIDDataset(BID_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = BIDDataset(BID_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = BIDDataset(BID_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
+        testDataset = BIDDataset(BID_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, loadImg=load_img)
         return trainDataset, testDataset
     
     if(initData.dataset == 'tid2013'):
         from Datasets.TID2013Dataset import TID2013Dataset, TID2013_PATH
         trainTrans = v2.Compose(trainTransList) if trainTransList else None
         testTrans = v2.Compose(testTransList) if testTransList else None
-        trainDataset = TID2013Dataset(TID2013_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized)
-        testDataset = TID2013Dataset(TID2013_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized)
+        trainDataset = TID2013Dataset(TID2013_PATH, True,trainTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
+        testDataset = TID2013Dataset(TID2013_PATH, False,testTrans,seed=initData.seed, normalize=initData.dataset_normalized, load_img=load_img)
         return trainDataset, testDataset
 
     raise Exception(f"not supported dataset '{initData.dataset}'")

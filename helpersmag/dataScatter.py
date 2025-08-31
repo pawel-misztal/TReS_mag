@@ -23,7 +23,7 @@ def plotres(srcc:List[float], preds:List[List[float]], initData:Dict[str,any]=No
         initData.seed = 2137
         initData.dataset = "clive"
         initData.dataset_normalized = False
-    _, testDataset = prepareDataset(initData,[],[])
+    _, testDataset = prepareDataset(initData,[],[], load_img=False)
 
 
     pred = preds[index]
@@ -38,13 +38,16 @@ def plotres(srcc:List[float], preds:List[List[float]], initData:Dict[str,any]=No
     plt.rcParams["font.family"] = "Times New Roman"
     plt.rcParams["font.size"] = 14
     plt.figure(figsize=size)
+    print("max x ", lbl.max())
     plt.scatter(lbl, pred)
     # plt.plot(indexes,reg1,color="k", alpha=0.5, linestyle='--', linewidth=1)
     # plt.plot(indexes,reg2,color="c", alpha=0.5, linestyle='--', linewidth=1)
     plt.xlabel("wartość docelowa")
     plt.ylabel("wartość przewidywana")
-    plt.xlim(0, 100) 
-    plt.ylim(0, max(100, pred.max() + pred.max() * 0.1))
+    max_val = 5
+    min_val = 0
+    plt.xlim(min_val, max_val) 
+    plt.ylim(min(min_val,pred.min()), max(max_val, pred.max() + pred.max() * 0.1))
     plt.plot(indexes,indexes, color="b")
     # plt.show()
 
@@ -89,9 +92,12 @@ if __name__ == "__main__":
     name:str
     path, name, drawResIndex = parseArgs()
     
+
     
     if(path):
         resPath = path
+        if not str(path).startswith("/home"):
+            resPath = Path("/home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/checkpoints") / Path(path) 
     if(name):
         if(".json" not in name):
             name = name + ".json"

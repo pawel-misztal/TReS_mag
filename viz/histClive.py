@@ -12,8 +12,11 @@ from torch.utils.data import DataLoader, Dataset
 from pathlib import Path
 import numpy as np
 from typing import Literal
+import locale
 
 
+locale.setlocale(locale.LC_ALL, "pl_PL.utf8")
+plt.rcParams["axes.formatter.use_locale"] = True
 
 
 def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, max, steps, mosDmos:Literal["MOS","DMOS"] = "MOS"):
@@ -26,6 +29,7 @@ def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, m
         lbs.append(lbl.item())
 
     print("making",datasetName)
+    print("min",np.min(lbs), "max", np.max(lbs))
     print(len(lbs))
     # print(lbs)
     numbins = 5
@@ -44,9 +48,9 @@ def printHist(trainDataset:Dataset, testDataset:Dataset, datasetName:str, min, m
     plt.savefig( p / (datasetName + ".png"))
     print("saved")
 
-train = clive.CLIVEDataset(clive.CLIVE_PATH,True,normalize=False,load_img=False)
-test = clive.CLIVEDataset(clive.CLIVE_PATH,False,normalize=False,load_img=False)
-printHist(train, test, "CLIVE",0,101,20)
+# train = clive.CLIVEDataset(clive.CLIVE_PATH,True,normalize=False,load_img=False)
+# test = clive.CLIVEDataset(clive.CLIVE_PATH,False,normalize=False,load_img=False)
+# printHist(train, test, "CLIVE",0,101,20)
 
 
 
@@ -69,14 +73,14 @@ printHist(train, test, "CLIVE",0,101,20)
 # printHist(train, test, "CISQ",0,1,20,"DMOS")
 
 
-# train = kadid.Kadid10kDataset(kadid.KADID10K_PATH ,True,normalize=False, loadImg=False)
-# test = kadid.Kadid10kDataset(kadid.KADID10K_PATH,False,normalize=False, loadImg=False)
-# printHist(train, test, "Kadid10k",1,5,20,"DMOS")
+train = kadid.Kadid10kDataset(kadid.KADID10K_PATH ,True,normalize=False, loadImg=False)
+test = kadid.Kadid10kDataset(kadid.KADID10K_PATH,False,normalize=False, loadImg=False)
+printHist(train, test, "Kadid10k",1,5,20,"DMOS")
 
 
-# train = koniq.Koniq10kData(koniq.KONIQ10K_PATH ,True,normalize=False, loadImg=False)
-# test = koniq.Koniq10kData(koniq.KONIQ10K_PATH,False,normalize=False, loadImg=False)
-# printHist(train, test, "Koniq10k",1,5,20,"MOS")
+# train = koniq.Koniq10kData(koniq.KONIQ10K_PATH ,True,normalize=False, loadImg=False,mos_z=True)
+# test = koniq.Koniq10kData(koniq.KONIQ10K_PATH,False,normalize=False, loadImg=False,mos_z=True)
+# printHist(train, test, "Koniq10k",0,100,20,"MOS")
 
 # train = tid.TID2013Dataset(tid.TID2013_PATH ,True,normalize=False,load_img=False)
 # test = tid.TID2013Dataset(tid.TID2013_PATH,False,normalize=False,load_img=False)

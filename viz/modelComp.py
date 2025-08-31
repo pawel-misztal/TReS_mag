@@ -5,6 +5,16 @@ from pathlib import Path
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import locale
+import matplotlib.ticker as ticker
+
+
+locale.setlocale(locale.LC_ALL, "pl_PL.utf8")
+plt.rcParams["axes.formatter.use_locale"] = True
+
+
+def format_func(value, tick_number):
+    return f"{value:.2f}".replace('.', ',')
 
 checkpointsPath = Path("/home/mrpaw/Documents/Projects/Python/PytorchTestRocm/magisterka/checkpoints")
 
@@ -177,7 +187,8 @@ def add_label(bars):
         #     color = "w" 
         plt.text(bar.get_x() + bar.get_width()/2,
                 yval, 
-                round(yval, 5),
+                f"{yval:.5f}".replace('.', ','), 
+                # round(yval, 5),
                 ha='center', 
                 va=va,
                 fontsize=24,
@@ -272,7 +283,9 @@ def makeBarChart(ref_paths:List[str], pathsDict:List[DataPaths], sort = False, t
     marginCoef = 0.22
     plt.ylim(min_val - dminmax *marginCoef, max_val + dminmax*marginCoef)
     plt.tight_layout()
+    plt.gca().yaxis.set_major_formatter(ticker.FuncFormatter(format_func))
     plt.show()
+
 
     print("data")
     sortI = np.argsort(_means)
@@ -302,11 +315,11 @@ def main():
 #     # DataPaths("Bez normalizacji\n enkodowania pozycji", npe_f_paths),
 # ], False, "", True, 0)
     
-    makeBarChart(None, [
-    DataPaths("Oryginalna funkcja straty", ref_paths),
-    DataPaths("Strata rankongowa z\nadaptacyjnym marginesem", dml_paths),
-    # DataPaths("Dynamiczna strata\ntripletu", dtl_paths),
-], False,"", True,labelAnle=0)
+#     makeBarChart(None, [
+#     DataPaths("Oryginalna funkcja straty", ref_paths),
+#     DataPaths("Strata rankongowa z\nadaptacyjnym marginesem", dml_paths),
+#     # DataPaths("Dynamiczna strata\ntripletu", dtl_paths),
+# ], False,"", True,labelAnle=0)
     
 #     makeBarChart(None, [
 #     DataPaths("ResNet 50", ref_paths),
@@ -315,15 +328,15 @@ def main():
 # ], False, "", True, labelAnle=0)
     
 
-#     makeBarChart(None, [
-#     DataPaths("dropout 0.5", ref_paths),
-#     DataPaths("dropout 0.1", dr02_paths),
-# ], False, "", True,labelAnle=0)
+    makeBarChart(None, [
+    DataPaths("dropout 0,5", ref_paths),
+    DataPaths("dropout 0,1", dr02_paths),
+], False, "", True,labelAnle=0)
     
-#     makeBarChart(None, [
-#     DataPaths("dropout 0.5", ref_paths),
-#     DataPaths("dropout 0.1", dr02_paths),
-# ], False, "", True, draw_mae=True,labelAnle=0)
+    makeBarChart(None, [
+    DataPaths("dropout 0,5", ref_paths),
+    DataPaths("dropout 0,1", dr02_paths),
+], False, "", True, draw_mae=True,labelAnle=0)
 
 #     makeBarChart(None, [
 #     DataPaths("dropout 0.5", ref_paths),
