@@ -7,7 +7,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-KONIQ10K_PATH = Path("/home/mrpaw/Documents/mag_databases/KonIQ-10k")
+# KONIQ10K_PATH = Path("/home/mrpaw/Documents/mag_databases/KonIQ-10k")
+KONIQ10K_PATH = Path("ZbioryDanych/KonIQ-10k_testowy")
 
 class Koniq10kData(Dataset):
   """
